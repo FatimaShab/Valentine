@@ -1,28 +1,130 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
   <title>Valentine?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    :root{
-      --bg1:#ffd6e8;
-      --bg2:#fff0f6;
-      --card:#ffffff;
-      --text:#1f2937;
-      --pink:#ff3b82;
-      --pink2:#ff6aa2;
-    }
-
-    *{box-sizing:border-box}
-
     body{
       margin:0;
       min-height:100vh;
-      display:grid;
-      place-items:center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 50% 10%, var(--bg2), var(--bg1));
-      overflow:hidden;
-      co
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:#ffd6e8;
+    }
+
+    .card{
+      background:white;
+      padding:30px 24px;
+      border-radius:20px;
+      width:min(600px,90%);
+      text-align:center;
+      box-shadow:0 20px 50px rgba(0,0,0,.15);
+      position:relative;
+    }
+
+    h1{
+      font-size:32px;
+      margin-bottom:6px;
+    }
+
+    .sub{
+      font-size:16px;
+      opacity:.7;
+      margin-bottom:20px;
+    }
+
+    .buttons{
+      position:relative;
+      height:120px;
+    }
+
+    button{
+      border:none;
+      padding:14px 24px;
+      font-size:18px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+
+    .yes{
+      background:#ff3b82;
+      color:white;
+    }
+
+    .no{
+      background:#eee;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+    }
+
+    .hint{
+      font-size:14px;
+      margin-top:12px;
+      min-height:20px;
+    }
+
+    .hidden{display:none}
+
+    .yay img{
+      width:100%;
+      max-width:360px;
+      border-radius:16px;
+      margin-top:14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div id="main">
+      <h1>Jamesy, will you be my Valentine?</h1>
+      <div class="sub">(I have the biggest crush on you)</div>
+
+      <div class="buttons" id="area">
+        <button class="yes" id="yes">Yes</button>
+        <button class="no" id="no">No</button>
+      </div>
+
+      <div class="hint" id="hint">choose wisely 😇</div>
+    </div>
+
+    <div id="yay" class="hidden yay">
+      <h1>wohoooo!! 🎆🎇</h1>
+      <img src="https://media.giphy.com/media/TnSWVzfO08oso/giphy.gif">
+    </div>
+  </div>
+
+  <script>
+    const no = document.getElementById("no");
+    const yes = document.getElementById("yes");
+    const hint = document.getElementById("hint");
+    const main = document.getElementById("main");
+    const yay = document.getElementById("yay");
+    const area = document.getElementById("area");
+
+    function moveNo(){
+      const x = Math.random() * (area.clientWidth - no.offsetWidth);
+      const y = Math.random() * (area.clientHeight - no.offsetHeight);
+      no.style.left = x + "px";
+      no.style.top = y + "px";
+      hint.textContent = "if you choose No i will f*ck you up 😈";
+    }
+
+    no.addEventListener("mouseenter", moveNo);
+    no.addEventListener("click", e => { e.preventDefault(); moveNo(); });
+
+    yes.addEventListener("click", () => {
+      main.classList.add("hidden");
+      yay.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
+
+
