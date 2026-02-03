@@ -27,107 +27,282 @@
     }
 
     .card{
-  background:var(--card);
-  padding:28px 24px;
-  border-radius:20px;
-  width:min(650px,92%);
-  text-align:center;
-  box-shadow:var(--shadow);
-  position:relative;
-}
+      background:var(--card);
+      padding:28px 24px;
+      border-radius:20px;
+      width:min(650px,92%);
+      text-align:center;
+      box-shadow:var(--shadow);
+      position:relative;
+    }
 
-/* ---------- ENVELOPE INTRO (SVG VERSION) ---------- */
-.envelope-wrap{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  min-height:320px;
-}
+    .hidden{ display:none; }
 
-.env-btn{
-  border:none;
-  background:transparent;
-  padding:0;
-  cursor:pointer;
-}
+    /* Views */
+    .view{
+      position:relative;
+      min-height:320px;
+    }
 
-.env-svg{
-  width:min(360px, 88vw);
-  height:auto;
-  filter: drop-shadow(0 22px 40px rgba(0,0,0,.18));
-  transition: transform .18s ease;
-  perspective: 900px;              /* ✅ important */
-}
+    /* ---------- ENVELOPE INTRO (SVG VERSION) ---------- */
+    .envelope-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      min-height:320px;
+    }
 
-.env-btn:hover .env-svg{
-  transform: translateY(-3px);
-}
+    .env-btn{
+      border:none;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+    }
 
-.env-svg .flap{
-  transform-origin: 160px 70px;
-  transform: rotateX(0deg);
-  transition: transform .55s ease;
-  transform-style: preserve-3d;     /* ✅ important */
-}
+    .env-svg{
+      width:min(360px, 88vw);
+      height:auto;
+      filter: drop-shadow(0 22px 40px rgba(0,0,0,.18));
+      transition: transform .18s ease;
+      perspective: 900px;
+    }
 
-.env-svg .letter{
-  transform: translateY(0);
-  transition: transform .55s ease;
-}
+    .env-btn:hover .env-svg{
+      transform: translateY(-3px);
+    }
 
-.env-btn.open .env-svg .flap{
-  transform: rotateX(180deg);
-}
+    .env-svg .flap{
+      transform-origin: 160px 70px;
+      transform: rotateX(0deg);
+      transition: transform .55s ease;
+      transform-style: preserve-3d;
+    }
 
-.env-btn.open .env-svg .letter{
-  transform: translateY(-22px);
-}
+    .env-svg .letter{
+      transform: translateY(0);
+      transition: transform .55s ease;
+    }
 
-.open-text{
-  font-size:14px;
-  opacity:.75;
-}
+    .env-btn.open .env-svg .flap{
+      transform: rotateX(180deg);
+    }
 
-<!-- ENVELOPE SCREEN (FIRST) -->
-<div id="envelopeScreen" class="view">
-  <div class="envelope-wrap">
-    <button class="env-btn" id="envelopeBtn" aria-label="Open envelope">
-      <svg class="env-svg" viewBox="0 0 320 220" aria-hidden="true">
-        <!-- card -->
-        <rect x="20" y="40" width="280" height="160" rx="20" fill="#ffffff"/>
-        <rect x="20" y="40" width="280" height="160" rx="20"
-              fill="none" stroke="rgba(255,59,130,.25)" stroke-width="4"/>
+    .env-btn.open .env-svg .letter{
+      transform: translateY(-22px);
+    }
 
-        <!-- bottom fold -->
-        <path d="M40 170 L160 105 L280 170 L280 190 L40 190 Z" fill="#ffe4ef"/>
+    .open-text{
+      font-size:14px;
+      opacity:.75;
+    }
 
-        <!-- letter -->
-        <g class="letter">
-          <rect x="95" y="70" width="130" height="90" rx="14"
-                fill="#ffffff" stroke="rgba(255,59,130,.18)" stroke-width="4"/>
-          <text x="160" y="128" text-anchor="middle" font-size="42">💌</text>
-        </g>
+    /* ---------- MAIN CONTENT ---------- */
 
-        <!-- flap -->
-        <g class="flap">
-          <path d="M40 90 L160 20 L280 90 L160 140 Z" fill="#ffb3cf"/>
-          <!-- heart on flap -->
-          <path d="M160 52
-                   C160 45 170 45 170 54
-                   C170 64 160 70 160 70
-                   C160 70 150 64 150 54
-                   C150 45 160 45 160 52 Z"
-                fill="#ff3b82"/>
-        </g>
-      </svg>
-    </button>
+    /* Corgi circle */
+    .avatar{
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      overflow:hidden;
+      margin:0 auto 14px;
+      border:6px solid rgba(255,59,130,.18);
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      background:#fff;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
 
-    <div class="open-text">tap to open 💗</div>
-  </div>
-</div>
+    h1{
+      font-size:32px;
+      margin:6px 0 6px;
+    }
 
+    .sub{
+      font-size:16px;
+      opacity:.72;
+      margin-bottom:18px;
+    }
+
+    /* Buttons area */
+    .buttons{
+      position:relative;
+      height:120px; /* space for runaway */
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .btn-row{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:2;
+    }
+
+    button{
+      border:none;
+      padding:13px 24px;
+      font-size:18px;
+      border-radius:999px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .1s ease, filter .12s ease;
+    }
+    button:active{ transform: scale(.98); }
+
+    .yes{
+      background:linear-gradient(135deg, var(--pink), #ff6aa2);
+      color:white;
+      box-shadow:0 10px 24px rgba(255,59,130,.25);
+    }
+
+    .no{
+      background:#eee;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      z-index:1;
+    }
+
+    .hint{
+      font-size:14px;
+      margin-top:10px;
+      min-height:20px;
+      opacity:.85;
+    }
+
+    /* Yay screen */
+    .yay h1{
+      margin-top:6px;
+      margin-bottom:10px;
+      font-size:36px;
+    }
+
+    .gif{
+      width:100%;
+      max-width:380px;
+      border-radius:18px;
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      display:block;
+      margin:8px auto 0;
+    }
+
+    .love-notes{
+      margin-top:14px;
+      font-style:italic;
+      font-size:18px;
+      opacity:.9;
+      line-height:1.4;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    /* Floating "what if" button OUTSIDE card */
+    .side-btn{
+      position:fixed;
+      right:22px;
+      bottom:22px;
+      padding:12px 18px;
+      font-size:14px;
+      border-radius:999px;
+      background:linear-gradient(135deg, #ff3b82, #ff6aa2);
+      color:white;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(255,59,130,.35);
+      z-index:2000;
+      display:none;
+    }
+    .side-btn:hover{ filter:brightness(1.05); }
+
+    /* Confetti (falling) */
+    .confetti{
+      position:fixed;
+      top:-10px;
+      width:10px;
+      height:14px;
+      opacity:.9;
+      border-radius:2px;
+      animation: fall linear forwards;
+      pointer-events:none;
+      z-index:999;
+    }
+    @keyframes fall{
+      to { transform: translateY(110vh) rotate(720deg); opacity:1; }
+    }
+
+    /* Firework burst */
+    .burst{
+      position:fixed;
+      left:0; top:0;
+      width:8px; height:8px;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:1000;
+    }
+    .spark{
+      position:absolute;
+      left:50%; top:50%;
+      width:6px; height:6px;
+      border-radius:50%;
+      transform: translate(-50%, -50%);
+      animation: spark 900ms ease-out forwards;
+    }
+    @keyframes spark{
+      0%   { transform: translate(-50%, -50%) scale(1); opacity:1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(.6); opacity:0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+    <!-- ENVELOPE SCREEN (FIRST) -->
+    <div id="envelopeScreen" class="view">
+      <div class="envelope-wrap">
+        <button class="env-btn" id="envelopeBtn" aria-label="Open envelope">
+          <svg class="env-svg" viewBox="0 0 320 220" aria-hidden="true">
+            <!-- card -->
+            <rect x="20" y="40" width="280" height="160" rx="20" fill="#ffffff"/>
+            <rect x="20" y="40" width="280" height="160" rx="20"
+                  fill="none" stroke="rgba(255,59,130,.25)" stroke-width="4"/>
+
+            <!-- bottom fold -->
+            <path d="M40 170 L160 105 L280 170 L280 190 L40 190 Z" fill="#ffe4ef"/>
+
+            <!-- letter -->
+            <g class="letter">
+              <rect x="95" y="70" width="130" height="90" rx="14"
+                    fill="#ffffff" stroke="rgba(255,59,130,.18)" stroke-width="4"/>
+              <text x="160" y="128" text-anchor="middle" font-size="42">💌</text>
+            </g>
+
+            <!-- flap -->
+            <g class="flap">
+              <path d="M40 90 L160 20 L280 90 L160 140 Z" fill="#ffb3cf"/>
+              <!-- heart on flap -->
+              <path d="M160 52
+                       C160 45 170 45 170 54
+                       C170 64 160 70 160 70
+                       C160 70 150 64 150 54
+                       C150 45 160 45 160 52 Z"
+                    fill="#ff3b82"/>
+            </g>
+          </svg>
+        </button>
+
+        <div class="open-text">tap to open 💗</div>
+      </div>
+    </div>
 
     <!-- MAIN SCREEN -->
     <div id="main" class="hidden view">
@@ -184,6 +359,33 @@
     const area = document.getElementById("area");
     const whatIfBtn = document.getElementById("whatIfBtn");
 
+    function showOnly(view){
+      [envelopeScreen, main, yay, seriously].forEach(v => v.classList.add("hidden"));
+      view.classList.remove("hidden");
+
+      whatIfBtn.style.display = (view === yay) ? "block" : "none";
+
+      if (view === yay) startParty();
+      else stopParty();
+    }
+
+    function centerNo(){
+      const startX = (area.clientWidth / 2) + 95;
+      const startY = (area.clientHeight / 2);
+      no.style.left = startX + "px";
+      no.style.top  = startY + "px";
+      no.style.transform = "translate(-50%, -50%)";
+    }
+
+    function moveNo(){
+      const x = Math.random() * (area.clientWidth - no.offsetWidth);
+      const y = Math.random() * (area.clientHeight - no.offsetHeight);
+      no.style.left = x + "px";
+      no.style.top = y + "px";
+      no.style.transform = "translate(0,0)";
+      hint.textContent = "if you choose No I’m coming for you 😈";
+    }
+
     // Party effects
     let partyInterval = null;
     function rand(min, max){ return Math.random() * (max - min) + min; }
@@ -213,10 +415,12 @@
         const s = document.createElement("div");
         s.className = "spark";
         s.style.background = color;
+
         const angle = (Math.PI * 2) * (i / sparks);
         const dist = rand(40, 120);
         s.style.setProperty("--dx", Math.cos(angle) * dist + "px");
         s.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+
         b.appendChild(s);
       }
 
@@ -238,44 +442,13 @@
       partyInterval = null;
     }
 
-    // Show only one view + control floating button visibility
-    function showOnly(view){
-      [envelopeScreen, main, yay, seriously].forEach(v => v.classList.add("hidden"));
-      view.classList.remove("hidden");
-
-      // show floating button ONLY on yay page
-      whatIfBtn.style.display = (view === yay) ? "block" : "none";
-
-      // party only on yay
-      if (view === yay) startParty();
-      else stopParty();
-    }
-
-    function centerNo(){
-      const startX = (area.clientWidth / 2) + 95;
-      const startY = (area.clientHeight / 2);
-      no.style.left = startX + "px";
-      no.style.top  = startY + "px";
-      no.style.transform = "translate(-50%, -50%)";
-    }
-
-    function moveNo(){
-      const x = Math.random() * (area.clientWidth - no.offsetWidth);
-      const y = Math.random() * (area.clientHeight - no.offsetHeight);
-      no.style.left = x + "px";
-      no.style.top = y + "px";
-      no.style.transform = "translate(0,0)";
-      hint.textContent = "if you choose No I’m coming for you 😈";
-    }
-
     // Envelope open -> go to main
     envelopeBtn.addEventListener("click", () => {
       envelopeBtn.classList.add("open");
       setTimeout(() => {
         showOnly(main);
-        // ensure NO button is placed nicely once main is visible
         setTimeout(centerNo, 0);
-      }, 600);
+      }, 650);
     });
 
     // Events
@@ -288,13 +461,12 @@
 
     // Initial
     window.addEventListener("load", () => {
-      showOnly(envelopeScreen); // start on envelope
+      showOnly(envelopeScreen);
     });
+
     window.addEventListener("resize", () => {
-      // only re-center when main is visible
       if (!main.classList.contains("hidden")) centerNo();
     });
   </script>
 </body>
 </html>
-
