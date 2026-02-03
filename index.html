@@ -236,7 +236,6 @@
         “To whatever end”
       </div>
 
-      <button class="side-btn" id="whatIfBtn">what if you said no?</button>
     </div>
 
     <!-- SERIOUSLY SCREEN -->
@@ -263,7 +262,7 @@
     }
 
     function centerNo(){
-      const startX = (area.clientWidth / 2) + 55;
+      const startX = (area.clientWidth / 2) + 95;
       const startY = (area.clientHeight / 2);
       no.style.left = startX + "px";
       no.style.top  = startY + "px";
@@ -349,5 +348,10 @@
     window.addEventListener("load", centerNo);
     window.addEventListener("resize", centerNo);
   </script>
+  <button class="side-btn outside" id="whatIfBtn">
+  what if you said no?
+</button>
+
 </body>
 </html>
+
