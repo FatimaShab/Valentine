@@ -118,9 +118,9 @@
 
     .hidden{display:none}
 
-    /* Yay screen */
+    /* Views */
     .view{
-      position:relative; /* so we can place bottom-right button */
+      position:relative;
       min-height:320px;
     }
 
@@ -148,20 +148,23 @@
       font-family: Georgia, "Times New Roman", serif;
     }
 
-    /* Bottom-right button on yay view */
+    /* Floating "what if" button OUTSIDE card */
     .side-btn{
-      position:absolute;
-      right:14px;
-      bottom:14px;
-      padding:10px 14px;
+      position:fixed;
+      right:22px;
+      bottom:22px;
+      padding:12px 18px;
       font-size:14px;
       border-radius:999px;
-      background:#f3f4f6;
-      color:#111827;
-      border:1px solid rgba(0,0,0,.08);
-      box-shadow:0 10px 22px rgba(0,0,0,.08);
+      background:linear-gradient(135deg, #ff3b82, #ff6aa2);
+      color:white;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(255,59,130,.35);
+      z-index:2000;
+      display:none; /* we show it ONLY on the yay page via JS */
     }
-    .side-btn:hover{ filter:brightness(.98); }
+    .side-btn:hover{ filter:brightness(1.05); }
 
     /* Confetti (falling) */
     .confetti{
@@ -235,7 +238,6 @@
         “Bhebak Jamesy, Always and Forever”<br>
         “To whatever end”
       </div>
-
     </div>
 
     <!-- SERIOUSLY SCREEN -->
@@ -245,6 +247,9 @@
     </div>
 
   </div>
+
+  <!-- Floating button OUTSIDE the white card -->
+  <button class="side-btn" id="whatIfBtn">what if you said no?</button>
 
   <script>
     const no = document.getElementById("no");
@@ -256,28 +261,6 @@
     const area = document.getElementById("area");
     const whatIfBtn = document.getElementById("whatIfBtn");
 
-    function showOnly(view){
-      [main, yay, seriously].forEach(v => v.classList.add("hidden"));
-      view.classList.remove("hidden");
-    }
-
-    function centerNo(){
-      const startX = (area.clientWidth / 2) + 95;
-      const startY = (area.clientHeight / 2);
-      no.style.left = startX + "px";
-      no.style.top  = startY + "px";
-      no.style.transform = "translate(-50%, -50%)";
-    }
-
-    function moveNo(){
-      const x = Math.random() * (area.clientWidth - no.offsetWidth);
-      const y = Math.random() * (area.clientHeight - no.offsetHeight);
-      no.style.left = x + "px";
-      no.style.top = y + "px";
-      no.style.transform = "translate(0,0)";
-      hint.textContent = "if you choose No i will f*ck you up 😈";
-    }
-
     // Party effects
     let partyInterval = null;
     function rand(min, max){ return Math.random() * (max - min) + min; }
@@ -287,10 +270,8 @@
       c.className = "confetti";
       c.style.left = rand(0, 100) + "vw";
       c.style.animationDuration = rand(1.6, 3.2) + "s";
-
       const colors = ["#ff3b82","#ff6aa2","#ffd166","#06d6a0","#118ab2","#c77dff","#ff8fab"];
       c.style.background = colors[Math.floor(rand(0, colors.length))];
-
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3500);
     }
@@ -309,12 +290,10 @@
         const s = document.createElement("div");
         s.className = "spark";
         s.style.background = color;
-
         const angle = (Math.PI * 2) * (i / sparks);
         const dist = rand(40, 120);
         s.style.setProperty("--dx", Math.cos(angle) * dist + "px");
         s.style.setProperty("--dy", Math.sin(angle) * dist + "px");
-
         b.appendChild(s);
       }
 
@@ -330,28 +309,57 @@
       }, 350);
     }
 
+    function stopParty(){
+      if (!partyInterval) return;
+      clearInterval(partyInterval);
+      partyInterval = null;
+    }
+
+    // Show only one view + control floating button visibility
+    function showOnly(view){
+      [main, yay, seriously].forEach(v => v.classList.add("hidden"));
+      view.classList.remove("hidden");
+
+      // show floating button ONLY on yay page
+      whatIfBtn.style.display = (view === yay) ? "block" : "none";
+
+      // party only on yay
+      if (view === yay) startParty();
+      else stopParty();
+    }
+
+    function centerNo(){
+      // Put "No" slightly right of center so it doesn't overlap "Yes"
+      const startX = (area.clientWidth / 2) + 95;
+      const startY = (area.clientHeight / 2);
+      no.style.left = startX + "px";
+      no.style.top  = startY + "px";
+      no.style.transform = "translate(-50%, -50%)";
+    }
+
+    function moveNo(){
+      const x = Math.random() * (area.clientWidth - no.offsetWidth);
+      const y = Math.random() * (area.clientHeight - no.offsetHeight);
+      no.style.left = x + "px";
+      no.style.top = y + "px";
+      no.style.transform = "translate(0,0)";
+      hint.textContent = "if you choose I'll f*ck you up!!! 😈";
+    }
+
     // Events
     no.addEventListener("mouseenter", moveNo);
     no.addEventListener("click", e => { e.preventDefault(); moveNo(); });
     no.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); }, {passive:false});
 
-    yes.addEventListener("click", () => {
-      showOnly(yay);
-      startParty();
-    });
+    yes.addEventListener("click", () => showOnly(yay));
+    whatIfBtn.addEventListener("click", () => showOnly(seriously));
 
-    whatIfBtn.addEventListener("click", () => {
-      showOnly(seriously);
+    // Initial
+    window.addEventListener("load", () => {
+      showOnly(main);
+      centerNo();
     });
-
-    // Initial layout
-    window.addEventListener("load", centerNo);
     window.addEventListener("resize", centerNo);
   </script>
-  <button class="side-btn outside" id="whatIfBtn">
-  what if you said no?
-</button>
-
 </body>
 </html>
-
