@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+    :root{
+      --bg:#ffd6e8;
+      --card:#ffffff;
+      --pink:#ff3b82;
+      --shadow: 0 20px 50px rgba(0,0,0,.15);
+      --text:#111827;
+    }
+
     body{
       margin:0;
       min-height:100vh;
@@ -13,46 +21,83 @@
       justify-content:center;
       align-items:center;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background:#ffd6e8;
+      background: radial-gradient(1200px 700px at 50% 10%, #fff0f6, var(--bg));
+      color:var(--text);
+      overflow:hidden;
     }
 
     .card{
-      background:white;
-      padding:30px 24px;
+      background:var(--card);
+      padding:28px 24px;
       border-radius:20px;
-      width:min(600px,90%);
+      width:min(650px,92%);
       text-align:center;
-      box-shadow:0 20px 50px rgba(0,0,0,.15);
+      box-shadow:var(--shadow);
       position:relative;
+    }
+
+    /* Corgi circle */
+    .avatar{
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      overflow:hidden;
+      margin:0 auto 14px;
+      border:6px solid rgba(255,59,130,.18);
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      background:#fff;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
     h1{
       font-size:32px;
-      margin-bottom:6px;
+      margin:6px 0 6px;
     }
 
     .sub{
       font-size:16px;
-      opacity:.7;
-      margin-bottom:20px;
+      opacity:.72;
+      margin-bottom:18px;
     }
 
+    /* Buttons area */
     .buttons{
       position:relative;
-      height:120px;
+      height:120px; /* space for runaway */
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .btn-row{
+      display:flex;              /* horizontal */
+      gap:14px;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:2;
     }
 
     button{
       border:none;
-      padding:14px 24px;
+      padding:13px 24px;
       font-size:18px;
       border-radius:999px;
       cursor:pointer;
+      user-select:none;
+      transition: transform .1s ease, filter .12s ease;
     }
+    button:active{ transform: scale(.98); }
 
     .yes{
-      background:#ff3b82;
+      background:linear-gradient(135deg, var(--pink), #ff6aa2);
       color:white;
+      box-shadow:0 10px 24px rgba(255,59,130,.25);
     }
 
     .no{
@@ -61,43 +106,145 @@
       left:50%;
       top:50%;
       transform:translate(-50%,-50%);
+      z-index:1;
     }
 
     .hint{
       font-size:14px;
-      margin-top:12px;
+      margin-top:10px;
       min-height:20px;
+      opacity:.85;
     }
 
     .hidden{display:none}
 
-    .yay img{
+    /* Yay screen */
+    .view{
+      position:relative; /* so we can place bottom-right button */
+      min-height:320px;
+    }
+
+    .yay h1{
+      margin-top:6px;
+      margin-bottom:10px;
+      font-size:36px;
+    }
+
+    .gif{
       width:100%;
-      max-width:360px;
-      border-radius:16px;
+      max-width:380px;
+      border-radius:18px;
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      display:block;
+      margin:8px auto 0;
+    }
+
+    .love-notes{
       margin-top:14px;
+      font-style:italic;
+      font-size:18px;
+      opacity:.9;
+      line-height:1.4;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    /* Bottom-right button on yay view */
+    .side-btn{
+      position:absolute;
+      right:14px;
+      bottom:14px;
+      padding:10px 14px;
+      font-size:14px;
+      border-radius:999px;
+      background:#f3f4f6;
+      color:#111827;
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 10px 22px rgba(0,0,0,.08);
+    }
+    .side-btn:hover{ filter:brightness(.98); }
+
+    /* Confetti (falling) */
+    .confetti{
+      position:fixed;
+      top:-10px;
+      width:10px;
+      height:14px;
+      opacity:.9;
+      border-radius:2px;
+      animation: fall linear forwards;
+      pointer-events:none;
+      z-index:999;
+    }
+    @keyframes fall{
+      to { transform: translateY(110vh) rotate(720deg); opacity:1; }
+    }
+
+    /* Firework burst */
+    .burst{
+      position:fixed;
+      left:0; top:0;
+      width:8px; height:8px;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:1000;
+    }
+    .spark{
+      position:absolute;
+      left:50%; top:50%;
+      width:6px; height:6px;
+      border-radius:50%;
+      transform: translate(-50%, -50%);
+      animation: spark 900ms ease-out forwards;
+    }
+    @keyframes spark{
+      0%   { transform: translate(-50%, -50%) scale(1); opacity:1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(.6); opacity:0; }
     }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <div id="main">
+
+    <!-- MAIN SCREEN -->
+    <div id="main" class="view">
+      <div class="avatar">
+        <img src="https://media.giphy.com/media/UMMXCX0X6eu6NMTKpJ/giphy.gif" alt="corgi">
+      </div>
+
       <h1>Jamesy, will you be my Valentine?</h1>
       <div class="sub">(I have the biggest crush on you)</div>
 
       <div class="buttons" id="area">
-        <button class="yes" id="yes">Yes</button>
+        <div class="btn-row">
+          <button class="yes" id="yes">Yes</button>
+        </div>
         <button class="no" id="no">No</button>
       </div>
 
       <div class="hint" id="hint">choose wisely 😇</div>
     </div>
 
-    <div id="yay" class="hidden yay">
+    <!-- YAY SCREEN -->
+    <div id="yay" class="hidden yay view">
       <h1>wohoooo!! 🎆🎇</h1>
-      <img src="https://media.giphy.com/media/TnSWVzfO08oso/giphy.gif">
+
+      <img class="gif" src="https://media.giphy.com/media/TnSWVzfO08oso/giphy.gif" alt="dancing">
+
+      <div class="love-notes">
+        “Bhebak Jamesy, Always and Forever”<br>
+        “To whatever end”
+      </div>
+
+      <button class="side-btn" id="whatIfBtn">what if you said no?</button>
     </div>
+
+    <!-- SERIOUSLY SCREEN -->
+    <div id="seriously" class="hidden view">
+      <h1>Seriously?</h1>
+      <img class="gif" src="https://media.giphy.com/media/EhmTZVtUAiddGVhfTP/giphy.gif" alt="seriously dog">
+    </div>
+
   </div>
 
   <script>
@@ -106,25 +253,101 @@
     const hint = document.getElementById("hint");
     const main = document.getElementById("main");
     const yay = document.getElementById("yay");
+    const seriously = document.getElementById("seriously");
     const area = document.getElementById("area");
+    const whatIfBtn = document.getElementById("whatIfBtn");
+
+    function showOnly(view){
+      [main, yay, seriously].forEach(v => v.classList.add("hidden"));
+      view.classList.remove("hidden");
+    }
+
+    function centerNo(){
+      const startX = (area.clientWidth / 2) + 55;
+      const startY = (area.clientHeight / 2);
+      no.style.left = startX + "px";
+      no.style.top  = startY + "px";
+      no.style.transform = "translate(-50%, -50%)";
+    }
 
     function moveNo(){
       const x = Math.random() * (area.clientWidth - no.offsetWidth);
       const y = Math.random() * (area.clientHeight - no.offsetHeight);
       no.style.left = x + "px";
       no.style.top = y + "px";
+      no.style.transform = "translate(0,0)";
       hint.textContent = "if you choose No i will f*ck you up 😈";
     }
 
+    // Party effects
+    let partyInterval = null;
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function spawnConfetti(){
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = rand(0, 100) + "vw";
+      c.style.animationDuration = rand(1.6, 3.2) + "s";
+
+      const colors = ["#ff3b82","#ff6aa2","#ffd166","#06d6a0","#118ab2","#c77dff","#ff8fab"];
+      c.style.background = colors[Math.floor(rand(0, colors.length))];
+
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3500);
+    }
+
+    function burstFirework(){
+      const b = document.createElement("div");
+      b.className = "burst";
+      b.style.left = rand(10, 90) + "vw";
+      b.style.top  = rand(10, 70) + "vh";
+
+      const colors = ["#ff3b82","#ffd166","#06d6a0","#c77dff","#4cc9f0","#ff8fab"];
+      const color = colors[Math.floor(rand(0, colors.length))];
+
+      const sparks = 14;
+      for(let i=0;i<sparks;i++){
+        const s = document.createElement("div");
+        s.className = "spark";
+        s.style.background = color;
+
+        const angle = (Math.PI * 2) * (i / sparks);
+        const dist = rand(40, 120);
+        s.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+        s.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+
+        b.appendChild(s);
+      }
+
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 1000);
+    }
+
+    function startParty(){
+      if (partyInterval) return;
+      partyInterval = setInterval(() => {
+        for(let i=0;i<5;i++) spawnConfetti();
+        if (Math.random() < 0.7) burstFirework();
+      }, 350);
+    }
+
+    // Events
     no.addEventListener("mouseenter", moveNo);
     no.addEventListener("click", e => { e.preventDefault(); moveNo(); });
+    no.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); }, {passive:false});
 
     yes.addEventListener("click", () => {
-      main.classList.add("hidden");
-      yay.classList.remove("hidden");
+      showOnly(yay);
+      startParty();
     });
+
+    whatIfBtn.addEventListener("click", () => {
+      showOnly(seriously);
+    });
+
+    // Initial layout
+    window.addEventListener("load", centerNo);
+    window.addEventListener("resize", centerNo);
   </script>
 </body>
 </html>
-
-
