@@ -36,6 +36,147 @@
       position:relative;
     }
 
+    /* ---------- ENVELOPE INTRO ---------- */
+    .envelope-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      min-height:320px;
+    }
+
+    .envelope{
+      width:220px;
+      height:150px;
+      position:relative;
+      cursor:pointer;
+      transform: translateY(0);
+      transition: transform .18s ease;
+      user-select:none;
+    }
+    .envelope:hover{ transform: translateY(-3px); }
+
+    /* Envelope body */
+    .env-body{
+      position:absolute;
+      inset:0;
+      background:#fff;
+      border-radius:14px;
+      box-shadow:0 20px 50px rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+
+    /* Bottom fold */
+    .env-bottom{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:0;
+      border-left:110px solid transparent;
+      border-right:110px solid transparent;
+      border-top:78px solid #ffe4ef;
+      filter:saturate(1.05);
+    }
+
+    /* Left/right folds */
+    .env-left{
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:0; height:0;
+      border-top:75px solid transparent;
+      border-bottom:75px solid transparent;
+      border-right:110px solid #ffd6e8;
+      opacity:.95;
+    }
+    .env-right{
+      position:absolute;
+      right:0; top:0; bottom:0;
+      width:0; height:0;
+      border-top:75px solid transparent;
+      border-bottom:75px solid transparent;
+      border-left:110px solid #ffd6e8;
+      opacity:.95;
+    }
+
+    /* Top flap */
+    .env-flap{
+      position:absolute;
+      left:0; top:0;
+      width:0; height:0;
+      border-left:110px solid transparent;
+      border-right:110px solid transparent;
+      border-bottom:85px solid #ffb3cf;
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform .45s ease;
+      z-index:5;
+    }
+
+    /* Small heart on flap (like your drawing) */
+    .env-heart{
+      position:absolute;
+      left:50%;
+      top:18px;
+      transform:translateX(-50%);
+      width:16px;
+      height:16px;
+      z-index:6;
+    }
+    .env-heart:before,
+    .env-heart:after{
+      content:"";
+      position:absolute;
+      width:10px;
+      height:16px;
+      background: var(--pink);
+      border-radius:10px 10px 0 0;
+      top:0;
+    }
+    .env-heart:before{
+      left:6px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+    .env-heart:after{
+      left:0px;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    /* Letter that slides up */
+    .letter{
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:12px;
+      height:92px;
+      background:#ffffff;
+      border-radius:12px;
+      border:2px solid rgba(255,59,130,.14);
+      box-shadow:0 12px 26px rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      transform: translateY(0);
+      transition: transform .55s ease;
+      z-index:3;
+    }
+
+    .open-text{
+      font-size:14px;
+      opacity:.75;
+    }
+
+    .envelope.open .env-flap{
+      transform: rotateX(180deg);
+    }
+    .envelope.open .letter{
+      transform: translateY(-58px);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+
     /* Corgi circle */
     .avatar{
       width:140px;
@@ -209,8 +350,26 @@
 <body>
   <div class="card">
 
+    <!-- ENVELOPE SCREEN (FIRST) -->
+    <div id="envelopeScreen" class="view">
+      <div class="envelope-wrap">
+        <div class="envelope" id="envelopeBtn" aria-label="Open envelope">
+          <div class="env-body"></div>
+          <div class="env-left"></div>
+          <div class="env-right"></div>
+          <div class="env-bottom"></div>
+
+          <div class="env-flap"></div>
+          <div class="env-heart" aria-hidden="true"></div>
+
+          <div class="letter">💌</div>
+        </div>
+        <div class="open-text">tap to open 💗</div>
+      </div>
+    </div>
+
     <!-- MAIN SCREEN -->
-    <div id="main" class="view">
+    <div id="main" class="hidden view">
       <div class="avatar">
         <img src="https://media.giphy.com/media/UMMXCX0X6eu6NMTKpJ/giphy.gif" alt="corgi">
       </div>
@@ -252,6 +411,9 @@
   <button class="side-btn" id="whatIfBtn">what if you said no?</button>
 
   <script>
+    const envelopeScreen = document.getElementById("envelopeScreen");
+    const envelopeBtn = document.getElementById("envelopeBtn");
+
     const no = document.getElementById("no");
     const yes = document.getElementById("yes");
     const hint = document.getElementById("hint");
@@ -317,7 +479,7 @@
 
     // Show only one view + control floating button visibility
     function showOnly(view){
-      [main, yay, seriously].forEach(v => v.classList.add("hidden"));
+      [envelopeScreen, main, yay, seriously].forEach(v => v.classList.add("hidden"));
       view.classList.remove("hidden");
 
       // show floating button ONLY on yay page
@@ -329,7 +491,6 @@
     }
 
     function centerNo(){
-      // Put "No" slightly right of center so it doesn't overlap "Yes"
       const startX = (area.clientWidth / 2) + 95;
       const startY = (area.clientHeight / 2);
       no.style.left = startX + "px";
@@ -343,8 +504,18 @@
       no.style.left = x + "px";
       no.style.top = y + "px";
       no.style.transform = "translate(0,0)";
-      hint.textContent = "if you choose I'll f*ck you up!!! 😈";
+      hint.textContent = "if you choose No I’m coming for you 😈";
     }
+
+    // Envelope open -> go to main
+    envelopeBtn.addEventListener("click", () => {
+      envelopeBtn.classList.add("open");
+      setTimeout(() => {
+        showOnly(main);
+        // ensure NO button is placed nicely once main is visible
+        setTimeout(centerNo, 0);
+      }, 600);
+    });
 
     // Events
     no.addEventListener("mouseenter", moveNo);
@@ -356,10 +527,12 @@
 
     // Initial
     window.addEventListener("load", () => {
-      showOnly(main);
-      centerNo();
+      showOnly(envelopeScreen); // start on envelope
     });
-    window.addEventListener("resize", centerNo);
+    window.addEventListener("resize", () => {
+      // only re-center when main is visible
+      if (!main.classList.contains("hidden")) centerNo();
+    });
   </script>
 </body>
 </html>
